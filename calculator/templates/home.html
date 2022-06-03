@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calculator</title>
+    <script>
+      
+   let aj = null;
+  txt='';
+function process() {
+  aj = new XMLHttpRequest();
+    txt1 = (document.getElementById("fnum").value);
+    txt2 = (document.getElementById("snum").value);
+    selectElement = document.querySelector('#opt');
+    txt3  = selectElement.value;
+    if(txt3=="+")
+    opert="1";
+    else if(txt3=="-")
+    opert="2";
+    else if(txt3=="*")
+    opert="3";
+    else if(txt3=="/")
+    opert="4";
+    else
+    opert="5";
+  console.log(txt1);
+  console.log(txt3);
+  console.log(txt2);
+
+  aj.onreadystatechange = csendreply;
+    aj.open(
+      "GET",
+      "/resultapi?fnum="+txt1+"&"+"&snum="+txt2+"&oper="+(opert),
+      true
+    );
+    aj.send(null);
+}
+
+function csendreply  () {
+    
+   console.log(txt1);
+      if (aj.readyState == 4) {
+       
+
+        let res =  JSON.parse(aj.responseText);
+        let div = document.getElementById("title");
+        div.innerHTML = "<br><br><h1 style='color:red;'>RESULT<h1>";
+        div2 = document.getElementById("result");
+        result = "<center><h1 style='color:blue;'>User Choice : " + res.operator + "</h1>";
+          result += "<h1 style='color:blue;'>First Number  : " + res.fnum + "</h1>";
+            result += "<h1 style='color:blue;'>Second Number : " + res.snum + "</h1><br>";
+            result += "<h1 style='color:blue;'>Result Of  " +res.operator+" : "+ res.answer + "</h1>";
+        result +="<a id='header-links' style='text-decoration: none;color: white;' href='{% url 'home' %}'><button type='button' class='btn' style='background-color:black;color:white;padding:15px;border-radius:15px;'  >Play Again</button></a><br><br>"
+        div2.innerHTML = result;
+      } 
+    }
+
+        </script>
+</head>
+<body style="padding:20px;background-color:lightblue;">
+  <center>
+    <div id="title">
+      <h1 style="color:white;background-color:red;padding:20px;">Calculator</h1><br><br><br>
+      
+    </div>
+  </center>
+  <div id="result">
+    <form method="GET" id="myform" action="/calculateresult/"  >
+      <center>
+      <h1>
+        First Number: <br><input type="number" id="fnum" name="fnum" value="0"><br>
+        Second  Number: <br><input type="number" name="lnum" id="snum" value="0"><br>
+        Operator  <br><select size="1" id="opt" name="opt" style="width:300px;height:30px;">
+         <option value=""> -Select- </option>
+            <option value="+">+</option>
+            <option value="-">-</option>
+            <option value="*">*</option>
+            <option value="/">/</option></select><br>
+       </h1>
+        <input type="button" style="background-color:black;color:white;padding:15px;border-radius:15px;" value="SUBMIT" onclick="process();">
+      </form> 
+         </center>
+          
+      <!-- <pre>
+         <center> <input type="button" style="background-color:black;color:white;padding:15px;border-radius:15px;" value="SUBMIT" onclick="process();">
+         </center></pre> -->
+    </form>
+  </div>
+  
+</body>
+</html>
